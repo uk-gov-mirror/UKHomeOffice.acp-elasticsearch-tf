@@ -68,7 +68,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   log_publishing_options {
     enabled                  = var.audit_logs_enabled
-    cloudwatch_log_group_arn = var.audit_logs_enabled ? aws_cloudwatch_log_group.elasticsearch_log_group[0].arn : ""
+    cloudwatch_log_group_arn = local.create_audit_log_group ? aws_cloudwatch_log_group.elasticsearch_log_group[0].arn : ""
     log_type                 = "AUDIT_LOGS"
   }
 
