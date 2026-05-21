@@ -183,6 +183,12 @@ variable "audit_logs_enabled" {
   default     = false
 }
 
+variable "manage_audit_log_group" {
+  type        = bool
+  description = "Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade; set false for new domains that do not need them. The log group is always created when audit_logs_enabled is true."
+  default     = true
+}
+
 variable "tls_security_policy" {
   type        = string
   description = "Default TLS security policy. Which controls the minimum TLS version required for traffic to the domain. Valid values Policy-Min-TLS-1-0-2019-07 Policy-Min-TLS-1-2-2019-07"
