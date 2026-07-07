@@ -39,6 +39,8 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
     ebs_enabled = var.ebs_volume_size > 0 ? true : false
     volume_size = var.ebs_volume_size
     volume_type = var.ebs_volume_type
+    iops        = var.ebs_iops > 0 ? var.ebs_iops : null
+    throughput  = var.ebs_throughput > 0 ? var.ebs_throughput : null
   }
 
   encrypt_at_rest {
