@@ -39,6 +39,8 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
     ebs_enabled = var.ebs_volume_size > 0 ? true : false
     volume_size = var.ebs_volume_size
     volume_type = var.ebs_volume_type
+    iops        = var.ebs_iops > 0 ? var.ebs_iops : null
+    throughput  = var.ebs_throughput > 0 ? var.ebs_throughput : null
   }
 
   encrypt_at_rest {
@@ -68,7 +70,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   log_publishing_options {
     enabled                  = var.audit_logs_enabled
-    cloudwatch_log_group_arn = var.audit_logs_enabled ? aws_cloudwatch_log_group.elasticsearch_log_group[0].arn : ""
+    cloudwatch_log_group_arn = local.create_audit_log_group ? aws_cloudwatch_log_group.elasticsearch_log_group[0].arn : ""
     log_type                 = "AUDIT_LOGS"
   }
 
@@ -166,7 +168,7 @@ data "aws_iam_policy_document" "elasticsearch_default_policy_document" {
   count   = var.policy != 0 ? 1 : 0
   version = "2012-10-17"
   statement {
-    sid    = "ElasticsearchPermissions"
+    sid    = var.policy_sid
     effect = "Allow"
     principals {
       type        = "AWS"

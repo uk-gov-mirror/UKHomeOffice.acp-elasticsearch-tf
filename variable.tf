@@ -53,7 +53,12 @@ variable "ebs_volume_type" {
 
 variable "ebs_iops" {
   default     = 0
-  description = "The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the Provisioned IOPS EBS volume type"
+  description = "The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the gp3 and Provisioned IOPS EBS volume types"
+}
+
+variable "ebs_throughput" {
+  default     = 0
+  description = "The throughput (in MiB/s) of EBS volumes attached to data nodes. Applicable only for the gp3 EBS volume type"
 }
 
 variable "encrypt_at_rest_enabled" {
@@ -99,6 +104,12 @@ variable "node_to_node_encryption_enabled" {
 variable "policy" {
   description = "The JSON policy for the Elasticsearch"
   default     = "default"
+}
+
+variable "policy_sid" {
+  description = "The SID for the default Elasticsearch policy statement. Override if the domain was originally created with a different SID to avoid perpetual drift."
+  type        = string
+  default     = "ElasticsearchPermissions"
 }
 
 variable "require_https" {
@@ -175,6 +186,12 @@ variable "audit_logs_enabled" {
   type        = bool
   description = "Enable audit logging for the Elasticsearch instance"
   default     = false
+}
+
+variable "manage_audit_log_group" {
+  type        = bool
+  description = "Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade; set false for new domains that do not need them. The log group is always created when audit_logs_enabled is true."
+  default     = true
 }
 
 variable "tls_security_policy" {
