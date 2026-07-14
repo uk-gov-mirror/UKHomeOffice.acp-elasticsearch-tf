@@ -9,7 +9,7 @@ Version 2 the input variable tls_security_policy was implemented with a default 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0, < 5.0 |
 
 ## Providers
 
@@ -21,14 +21,15 @@ Version 2 the input variable tls_security_policy was implemented with a default 
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_elasticsearch_iam_users_policy_self_serve_access"></a> [elasticsearch\_iam\_users\_policy\_self\_serve\_access](#module\_elasticsearch\_iam\_users\_policy\_self\_serve\_access) | git::https://github.com/UKHomeOffice/acp-tf-self-serve-access-keys | v0.1.0 |
-| <a name="module_self_serve_access_keys"></a> [self\_serve\_access\_keys](#module\_self\_serve\_access\_keys) | git::https://github.com/UKHomeOffice/acp-tf-self-serve-access-keys | v0.1.0 |
+| <a name="module_elasticsearch_iam_users_policy_self_serve_access"></a> [elasticsearch\_iam\_users\_policy\_self\_serve\_access](#module\_elasticsearch\_iam\_users\_policy\_self\_serve\_access) | git::https://github.com/UKHomeOffice/acp-tf-self-serve-access-keys | v0.2.0 |
+| <a name="module_self_serve_access_keys"></a> [self\_serve\_access\_keys](#module\_self\_serve\_access\_keys) | git::https://github.com/UKHomeOffice/acp-tf-self-serve-access-keys | v0.2.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
 | [aws_cloudwatch_log_group.elasticsearch_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_resource_policy.elasticsearch_log_group_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_resource_policy) | resource |
 | [aws_elasticsearch_domain.elasticsearch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticsearch_domain) | resource |
 | [aws_elasticsearch_domain_policy.elasticsearch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticsearch_domain_policy) | resource |
 | [aws_iam_policy.elasticsearch_audit_log_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
@@ -54,7 +55,8 @@ Version 2 the input variable tls_security_policy was implemented with a default 
 | <a name="input_dedicated_master_count"></a> [dedicated\_master\_count](#input\_dedicated\_master\_count) | Number of dedicated master nodes in the cluster | `number` | `0` | no |
 | <a name="input_dedicated_master_enabled"></a> [dedicated\_master\_enabled](#input\_dedicated\_master\_enabled) | Indicates whether dedicated master nodes are enabled for the cluster | `string` | `"false"` | no |
 | <a name="input_dedicated_master_type"></a> [dedicated\_master\_type](#input\_dedicated\_master\_type) | Instance type of the dedicated master nodes in the cluster | `string` | `"t3.small.elasticsearch"` | no |
-| <a name="input_ebs_iops"></a> [ebs\_iops](#input\_ebs\_iops) | The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the Provisioned IOPS EBS volume type | `number` | `0` | no |
+| <a name="input_ebs_iops"></a> [ebs\_iops](#input\_ebs\_iops) | The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the gp3 and Provisioned IOPS EBS volume types | `number` | `0` | no |
+| <a name="input_ebs_throughput"></a> [ebs\_throughput](#input\_ebs\_throughput) | The throughput (in MiB/s) of EBS volumes attached to data nodes. Applicable only for the gp3 EBS volume type | `number` | `0` | no |
 | <a name="input_ebs_volume_size"></a> [ebs\_volume\_size](#input\_ebs\_volume\_size) | Optionally use EBS volumes for data storage by specifying volume size in GB | `number` | `0` | no |
 | <a name="input_ebs_volume_type"></a> [ebs\_volume\_type](#input\_ebs\_volume\_type) | Storage type of EBS volumes | `string` | `"gp2"` | no |
 | <a name="input_elasticsearch_version"></a> [elasticsearch\_version](#input\_elasticsearch\_version) | Version of Elasticsearch to deploy | `string` | `"6.3"` | no |
@@ -67,12 +69,14 @@ Version 2 the input variable tls_security_policy was implemented with a default 
 | <a name="input_internal_user_database_enabled"></a> [internal\_user\_database\_enabled](#input\_internal\_user\_database\_enabled) | Enable the internal user database | `bool` | `false` | no |
 | <a name="input_key_rotation"></a> [key\_rotation](#input\_key\_rotation) | Enable email notifications for old IAM keys. | `string` | `"true"` | no |
 | <a name="input_log_publishing_index_enabled"></a> [log\_publishing\_index\_enabled](#input\_log\_publishing\_index\_enabled) | Specifies whether log publishing option for INDEX\_SLOW\_LOGS is enabled or not | `string` | `"false"` | no |
+| <a name="input_manage_audit_log_group"></a> [manage\_audit\_log\_group](#input\_manage\_audit\_log\_group) | Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade; set false for new domains that do not need them. The log group is always created when audit\_logs\_enabled is true. | `bool` | `true` | no |
 | <a name="input_master_user_iam_enabled"></a> [master\_user\_iam\_enabled](#input\_master\_user\_iam\_enabled) | If set to true, the IAM user created by this module will be the master user of the domain. | `bool` | `false` | no |
 | <a name="input_master_user_name"></a> [master\_user\_name](#input\_master\_user\_name) | n/a | `string` | `""` | no |
 | <a name="input_master_user_password"></a> [master\_user\_password](#input\_master\_user\_password) | The master user password must contain at least one uppercase letter, one lowercase letter, one number, and one special character. | `string` | `""` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the elasticsearch cluster | `string` | n/a | yes |
 | <a name="input_node_to_node_encryption_enabled"></a> [node\_to\_node\_encryption\_enabled](#input\_node\_to\_node\_encryption\_enabled) | Whether to enable node-to-node encryption | `string` | `"false"` | no |
 | <a name="input_policy"></a> [policy](#input\_policy) | The JSON policy for the Elasticsearch | `string` | `"default"` | no |
+| <a name="input_policy_sid"></a> [policy\_sid](#input\_policy\_sid) | The SID for the default Elasticsearch policy statement. Override if the domain was originally created with a different SID to avoid perpetual drift. | `string` | `"ElasticsearchPermissions"` | no |
 | <a name="input_require_https"></a> [require\_https](#input\_require\_https) | Determines whether https required for connections to this domain | `string` | `"false"` | no |
 | <a name="input_s3_bucket"></a> [s3\_bucket](#input\_s3\_bucket) | Allow ES user to get objects from specified bucket | `any` | `null` | no |
 | <a name="input_s3_bucket_kms_key"></a> [s3\_bucket\_kms\_key](#input\_s3\_bucket\_kms\_key) | Allow ES user to use specified KMS key to decrypt objects from given bucket | `any` | `null` | no |
