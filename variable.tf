@@ -185,7 +185,7 @@ variable "audit_logs_enabled" {
 
 variable "manage_audit_log_group" {
   type        = bool
-  description = "Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade; set false for new domains that do not need them. The log group is always created when audit_logs_enabled is true."
+  description = "Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade. The log group is always created when audit_logs_enabled is true. When both this and audit_logs_enabled are false, no log_publishing_options block is sent for the domain. Only set false where the domain has no existing log publishing configuration in AWS - a plan showing log_publishing_options being added confirms there is none."
   default     = true
 }
 
