@@ -75,6 +75,7 @@ Version 2 the input variable tls_security_policy was implemented with a default 
 | <a name="input_name"></a> [name](#input\_name) | Name of the elasticsearch cluster | `string` | n/a | yes |
 | <a name="input_node_to_node_encryption_enabled"></a> [node\_to\_node\_encryption\_enabled](#input\_node\_to\_node\_encryption\_enabled) | Whether to enable node-to-node encryption | `string` | `"false"` | no |
 | <a name="input_policy"></a> [policy](#input\_policy) | The JSON policy for the Elasticsearch | `string` | `"default"` | no |
+| <a name="input_policy_sid"></a> [policy\_sid](#input\_policy\_sid) | The SID for the default Elasticsearch policy statement. Override if the domain was originally created with a different SID to avoid perpetual drift. | `string` | `"ElasticsearchPermissions"` | no |
 | <a name="input_require_https"></a> [require\_https](#input\_require\_https) | Determines whether https required for connections to this domain | `string` | `"false"` | no |
 | <a name="input_s3_bucket"></a> [s3\_bucket](#input\_s3\_bucket) | Allow ES user to get objects from specified bucket | `any` | `null` | no |
 | <a name="input_s3_bucket_kms_key"></a> [s3\_bucket\_kms\_key](#input\_s3\_bucket\_kms\_key) | Allow ES user to use specified KMS key to decrypt objects from given bucket | `any` | `null` | no |
