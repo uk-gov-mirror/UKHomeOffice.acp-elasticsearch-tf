@@ -185,8 +185,14 @@ variable "audit_logs_enabled" {
 
 variable "manage_audit_log_group" {
   type        = bool
-  description = "Manage the audit-log CloudWatch log group and its log resource policy. Defaults to true so existing domains keep them on upgrade. The log group is always created when audit_logs_enabled is true. When both this and audit_logs_enabled are false, no log_publishing_options block is sent for the domain. Only set false where the domain has no existing log publishing configuration in AWS - a plan showing log_publishing_options being added confirms there is none."
+  description = "Manage the audit-log CloudWatch log group. Defaults to true so existing domains keep it on upgrade. The log group is always created when audit_logs_enabled is true. When both this and audit_logs_enabled are false, no log_publishing_options block is sent for the domain. Only set false where the domain has no existing log publishing configuration in AWS - a plan showing log_publishing_options being added confirms there is none. The log resource policy is controlled separately by create_log_resource_policy."
   default     = true
+}
+
+variable "create_log_resource_policy" {
+  type        = bool
+  description = "Create the CloudWatch log resource policy that permits the Elasticsearch service to write audit logs. The policy is account-wide and its document is identical for every domain, so a single grant covers every domain in the account, and AWS allows only 10 per region per account. Defaults to false because a duplicate consumes the limit without granting anything further. Set true only in an account that holds no equivalent grant. Has no effect when no log group is managed."
+  default     = false
 }
 
 variable "tls_security_policy" {
