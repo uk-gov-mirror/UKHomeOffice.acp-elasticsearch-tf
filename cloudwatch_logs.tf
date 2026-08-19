@@ -2,6 +2,10 @@
 
 locals {
   create_audit_log_group = var.manage_audit_log_group || var.audit_logs_enabled
+
+  # The log resource policy is account-wide and identical for every domain, so it
+  # is gated separately from the per-domain log group.
+  create_log_resource_policy = local.create_audit_log_group && var.create_log_resource_policy
 }
 
 resource "aws_cloudwatch_log_group" "elasticsearch_log_group" {
@@ -12,7 +16,7 @@ resource "aws_cloudwatch_log_group" "elasticsearch_log_group" {
 }
 
 resource "aws_cloudwatch_log_resource_policy" "elasticsearch_log_group_policy" {
-  count = local.create_audit_log_group ? 1 : 0
+  count = local.create_log_resource_policy ? 1 : 0
 
   policy_name = "${var.name}-log-group-policy"
 
